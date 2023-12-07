@@ -1,0 +1,65 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: nginx-rollout
+  labels:
+    app: rollout
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: rollout
+  template:
+    metadata:
+      labels:
+        app: rollout
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:mainline
+        ports:
+        - containerPort: 80
+  strategy:
+    blueGreen:
+      activeService: rollout-service-active
+      previewService: rollout-service-preview
+      previewReplicaCount: 1
+      autoPromotionEnabled: false
+      # activeMetadata will be merged and updated in-place into the ReplicaSet's spec.template.metadata
+      # of the active pods. +optional
+      activeMetadata:
+        labels:
+          role: active
+
+      # Metadata which will be attached to the preview pods only during their preview phase.
+      # +optional
+      previewMetadata:
+        labels:
+          role: preview
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rollout-service-active
+spec:
+  selector:
+    app: rollout
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+  type: LoadBalancer
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rollout-service-preview
+spec:
+  selector:
+    app: rollout
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+  type: LoadBalancer
