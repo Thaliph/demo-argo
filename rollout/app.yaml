@@ -20,6 +20,18 @@ spec:
         image: nginx:mainline
         ports:
         - containerPort: 80
+## BEGIN : ADDED
+        volumeMounts:
+          - name: config-vol
+            mountPath: /etc/nginx/
+      volumes:
+        - name: config-vol
+          configMap:
+            name: nginx-config
+            items:
+              - key: nginx.conf
+                path: nginx.conf
+## END : ADDED
   strategy:
     blueGreen:
       activeService: rollout-service-active
@@ -63,3 +75,23 @@ spec:
     port: 80
     targetPort: 80
   type: LoadBalancer
+## BEGIN : ADDED
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-config
+data:
+  nginx.conf: '
+events {
+}
+http {
+   server {
+       listen 80;
+       location / {
+           return 200 "Hello world!";
+       }
+   }
+}
+'
+## END : ADDED
