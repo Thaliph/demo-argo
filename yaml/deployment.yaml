@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: test
+  replicas: 2 # tells deployment to run 2 pods matching the template
+  template:
+    metadata:
+      labels:
+        app: test
+    spec:
+      containers:
+      - name: test
+        image: europe-west1-docker.pkg.dev/s4a-shared-artifact-registry/s4a-reg-docker-digital-tooling/python-hello:dev-1.0.0
+        ports:
+        - containerPort: 8080
