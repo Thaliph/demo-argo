@@ -4,7 +4,7 @@ metadata:
   name: demo
   namespace: argocd
   annotations:
-    argocd-image-updater.argoproj.io/image-list: europe-west1-docker.pkg.dev/s4a-shared-artifact-registry/s4a-reg-docker-digital-tooling/python-hello:dev-x
+    argocd-image-updater.argoproj.io/image-list: tmp
 spec:
   destination:
     name: in-cluster
