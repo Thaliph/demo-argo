@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: demo
+  namespace: argocd
+  annotations:
+    argocd-image-updater.argoproj.io/image-list: europe-west1-docker.pkg.dev/s4a-shared-artifact-registry/s4a-reg-docker-digital-tooling/python-hello:dev-x
+spec:
+  destination:
+    name: in-cluster
+    namespace: default
+  project: default
+  source:
+    path: imageupdater/yaml
+    repoURL: 'https://github.com/Thaliph/demo-argo.git'
+    targetRevision: main
+  syncPolicy:
+    syncOptions:
+      - ApplyOutOfSyncOnly=true
+      - PrunePropagationPolicy=foreground
+      - RespectIgnoreDifferences=true
