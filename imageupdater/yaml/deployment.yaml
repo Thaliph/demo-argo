@@ -15,6 +15,6 @@ spec:
     spec:
       containers:
       - name: test
-        image: europe-west1-docker.pkg.dev/s4a-shared-artifact-registry/s4a-reg-docker-digital-tooling/python-hello:dev-1.0.0
+        image: tmp
         ports:
         - containerPort: 8080
